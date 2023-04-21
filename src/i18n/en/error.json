@@ -1,0 +1,18 @@
+{
+  "internal_server_error": "Internal server error",
+  "common": {
+    "not_found": "{obj} is not found",
+    "existed": "{obj} is already existed",
+    "invalid": "{obj} is not valid",
+    "forbidden_access": "You are not allow to access {obj}"
+  },
+  "default_message": "Something went wrong!",
+  "token_expired": "Your session has expired. Please login again.",
+  "verify_code_invalid": "The code you entered is incorrect. Please try again.",
+  "email_not_found": "Email is not found",
+  "cant_send_active_mail": "Can't send active mail",
+  "invalid_email_or_password": "Email or password is not correct",
+  "email_already_exists": "Email is already exists",
+  "invalid_current_password": "Current password is not correct",
+  "invalid_request": "Invalid request"
+}
