@@ -1,5 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ContextType,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
+import { fieldsProjection } from 'graphql-fields-list';
 
 import { AppRepository } from '../../../database/app.repository';
 import { AuthService } from '../auth.service';
@@ -12,20 +19,29 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  async canActivate(context) {
+  async canActivate(context: ExecutionContext) {
     const can = (await super.canActivate(context)) as boolean;
     if (!can) return false;
 
-    const request = context.switchToHttp().getRequest();
+    const request = this.getRequest(context);
+
     const decoded = request.user;
 
-    const user = await this.appRepository.user.getOne({
-      where: {
-        _id: decoded._id,
-      },
-      select:
-        'email fullName status role createdAt updatedAt avatar resetTokenCode',
-    });
+    const query: any = {
+      where: { _id: decoded._id },
+    };
+
+    if (this.isGraphqlRequest(context)) {
+      const selectFields = fieldsProjection(
+        GqlExecutionContext.create(context).getInfo(),
+      );
+      query.select = selectFields;
+    } else {
+      query.select =
+        'email fullName status role createdAt updatedAt avatar resetTokenCode shopify.activeStoreId localUserId';
+    }
+    const user = await this.appRepository.user.getOne(query);
+
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -45,6 +61,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     };
 
     return true;
+  }
+
+  getRequest(context: ExecutionContext) {
+    if (this.isGraphqlRequest(context)) {
+      return GqlExecutionContext.create(context).getContext().req;
+    }
+    return context.switchToHttp().getRequest();
+  }
+
+  isGraphqlRequest(context: ExecutionContext) {
+    return context.getType<ContextType | 'graphql'>() === 'graphql';
   }
 
   handleRequest(err, user, info) {

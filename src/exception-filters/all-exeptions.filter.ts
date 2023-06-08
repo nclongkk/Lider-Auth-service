@@ -1,6 +1,7 @@
 import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
 import { Catch, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { GqlArgumentsHost } from '@nestjs/graphql';
 import type { Request, Response } from 'express';
 import _ from 'lodash';
 import { MessageKey } from '../i18n/i18n.key';
@@ -57,6 +58,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
+
+    const gqHost = GqlArgumentsHost.create(host);
+    if (!request && gqHost['contextType'] === 'graphql') {
+      return;
+    }
+
     const statusCode: number = exception.getStatus();
     let message;
     let messageCode;

@@ -7,7 +7,7 @@ export interface ISwaggerConfiguration {
 export const swaggerConfigurationFn = (): ISwaggerConfiguration => {
   return {
     mode: process.env.SWAGGER_MODE ?? '',
-    username: process.env.SWAGGER_USERNAME ?? 'ecomdy',
+    username: process.env.SWAGGER_USERNAME ?? 'lider',
     password: process.env.SWAGGER_PASSWORD ?? '123123',
   };
 };

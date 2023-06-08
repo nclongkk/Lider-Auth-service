@@ -24,8 +24,8 @@ export class SwaggerConfig {
       // );
 
       const config = new DocumentBuilder()
-        .setTitle('Ecomdy Project API')
-        .setDescription('The Ecomdy project APIs description')
+        .setTitle('Lider Project API')
+        .setDescription('The Lider project APIs description')
         .setVersion('2.0')
         .addBearerAuth()
         .build();

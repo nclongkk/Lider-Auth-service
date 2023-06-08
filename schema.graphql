@@ -1,0 +1,35 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type SignupTracking {
+  userAgent: String
+  ip: String
+  countryCode: String
+  countryName: String
+  trackingAt: String
+  provider: String
+}
+
+type User {
+  _id: String!
+  fullName: String!
+  email: String
+  status: String!
+  resetTokenCode: String
+  role: String
+  avatar: String
+  googleId: String
+  fbId: String
+  signupTracking: SignupTracking
+  lastActive: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  user: User!
+}

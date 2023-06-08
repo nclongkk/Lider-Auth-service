@@ -25,6 +25,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { PaymentApiService } from '../../services/payment/payment-api.service';
 import { SendEmailService } from '../mail/send-email.service';
 import { MAIL_TEMPLATES } from '../mail/constants/mail.constants';
+import { AppApiService } from '../../services/app/app-api.service';
 @Injectable()
 export class AuthService {
   constructor(
@@ -37,6 +38,7 @@ export class AuthService {
     private readonly redisLock: RedisLockService,
     private readonly paymentApiService: PaymentApiService,
     private readonly sendEmailService: SendEmailService,
+    private readonly appApiService: AppApiService,
   ) {}
 
   async buildCacheUserInRedis(cacheUser): Promise<any> {
@@ -93,9 +95,7 @@ export class AuthService {
         ttl: ttlTime,
       };
     } catch (error) {
-      throw new InternalServerErrorException({
-        i18nKey: 'error.cant_send_active_mail',
-      });
+      throw new InternalServerErrorException('error.cant_send_active_mail');
     }
   }
 
@@ -168,8 +168,10 @@ export class AuthService {
     const newUser = await this.appRepository.user.createOne({
       data: registerUser,
     });
-    this.paymentApiService.createPaymentCustomer(newUser);
 
+    // Inform create user
+    this.paymentApiService.createPaymentCustomer(newUser);
+    this.appApiService.createAppCustomer(newUser);
     return newUser;
   }
 

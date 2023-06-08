@@ -1,5 +1,6 @@
 import type {
   CallHandler,
+  ContextType,
   ExecutionContext,
   NestInterceptor,
 } from '@nestjs/common';
@@ -15,6 +16,9 @@ export class TransformInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<any> {
+    if (context.getType<ContextType | 'graphql'>() === 'graphql') {
+      return next.handle();
+    }
     const request = context.switchToHttp().getRequest<Request>();
 
     return next.handle().pipe(

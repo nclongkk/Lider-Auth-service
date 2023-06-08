@@ -9,6 +9,7 @@ import { clientConfigurationFn } from './client/client.configuration';
 import { facebookAuthConfigurationFn } from './facebook-auth/facebook-auth.config';
 import { servicesConfigurationFn } from './services/configuration';
 import { mailConfigurationFn } from './mail/configuration';
+import { graphQlConfigurationFn } from './graphql/configuration';
 
 export const configuration = () => ({
   app: appConfigurationFn(),
@@ -22,4 +23,5 @@ export const configuration = () => ({
   client: clientConfigurationFn(),
   services: servicesConfigurationFn(),
   mail: mailConfigurationFn(),
+  gql: graphQlConfigurationFn(),
 });

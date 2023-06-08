@@ -3,5 +3,5 @@ export interface IDatabaseConfiguration {
 }
 
 export const databaseConfigurationFn = (): IDatabaseConfiguration => ({
-  uri: process.env.DATABASE_URI ?? 'mongodb://localhost:27017/ecomdy',
+  uri: process.env.DATABASE_URI ?? 'mongodb://localhost:27017/lider',
 });

@@ -21,7 +21,7 @@ async function bootstrap(): Promise<void> {
   });
   app.useLogger(app.get(Logger));
   app.use(cookieParser());
-  app.use(helmet());
+  // app.use(helmet());∫∫
   app.use(compression());
   app.enableCors();
   app.get(SwaggerConfig).setupSwagger(app);

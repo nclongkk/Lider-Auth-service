@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Model, Document, Aggregate } from 'mongoose';
+import { Model, Document } from 'mongoose';
 
 import { QUERY_SELECT_LIMIT } from '../constants';
+import {
+  PaginationParam,
+  PaginationResult,
+} from '../shared/interfaces/pagination.interface';
 import { IBaseRepository, IParamQuery } from './base-repository.interface';
 
 @Injectable()
@@ -127,5 +131,21 @@ export class BaseRepository<T extends Document> implements IBaseRepository<T> {
 
   async distinct(field: string, params?: IParamQuery<T>): Promise<any> {
     return this.baseModule.distinct(field, params.where);
+  }
+
+  async getAllWithPaging(params: IParamQuery<T>): Promise<PaginationResult<T>> {
+    const [records, total] = await Promise.all([
+      this.getAll(params),
+      this.count(params),
+    ]);
+
+    return {
+      paging: {
+        total,
+        page: params.page,
+        limit: params.limit,
+      },
+      content: records,
+    };
   }
 }
