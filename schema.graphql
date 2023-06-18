@@ -32,4 +32,5 @@ scalar DateTime
 
 type Query {
   user: User!
+  userById(id: String!): User!
 }

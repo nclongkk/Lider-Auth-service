@@ -248,24 +248,23 @@ export class AuthService {
       !_.has(user, 'signupTracking.ip');
 
     if (shouldRefillUser) {
-      const { ip, countryCode, countryName, provider, userAgent } =
-        await this.detectUserCountryRegionIp(req);
-
-      const currentSignupTracking = user.signupTracking;
-      if (
-        !currentSignupTracking?.ip ||
-        !currentSignupTracking?.countryName ||
-        !currentSignupTracking?.countryCode
-      ) {
-        _.set(updateUser, '$set.signupTracking', {
-          ip,
-          trackingAt: new Date(),
-          provider,
-          countryName,
-          countryCode,
-          userAgent,
-        });
-      }
+      // const { ip, countryCode, countryName, provider, userAgent } =
+      //   await this.detectUserCountryRegionIp(req);
+      // const currentSignupTracking = user.signupTracking;
+      // if (
+      //   !currentSignupTracking?.ip ||
+      //   !currentSignupTracking?.countryName ||
+      //   !currentSignupTracking?.countryCode
+      // ) {
+      //   _.set(updateUser, '$set.signupTracking', {
+      //     ip,
+      //     trackingAt: new Date(),
+      //     provider,
+      //     countryName,
+      //     countryCode,
+      //     userAgent,
+      //   });
+      // }
     }
 
     const updatedUser = await this.appRepository.user.findOneAndUpdate({
